@@ -1,7 +1,7 @@
 package ua.ictloud.lessons.polym;
 
 /**
- * Created by student on 16-Apr-18.     ПОЛИМОРФИЗ
+ * Created by student on 16-Apr-18.     ПОЛИМОРФИЗ, абстакция,
  */
 public class Main {
     public static void main(String[] args) {

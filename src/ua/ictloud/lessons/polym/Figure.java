@@ -1,11 +1,9 @@
 package ua.ictloud.lessons.polym;
 
 /**
- * Created by student on 16-Apr-18.
+ * Created by student on 16-Apr-18.      //АБСТРАКТНЫЙ КЛАСС  и МЕТОД
  */
-public class Figure {
-    public double getArea(){
-        System.out.println("ogogogog");
-        return 0.0;
+public abstract class Figure {
+    public  abstract double  getArea();
             }
-}
+
