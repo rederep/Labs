@@ -13,6 +13,6 @@ public class MainPattern {
         boolean isWeb = webMat.matches();
         System.out.println(isWeb);
 
-
+        System.out.println(Pattern.matches(".*(http|https)://.*","Hello my friend? https://porno.ua" ));
     }
 }
