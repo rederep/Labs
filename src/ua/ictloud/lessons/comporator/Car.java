@@ -5,7 +5,7 @@ import java.util.Comparator;
 /**
  * Created by student on 18-Apr-18.
  */
-public class Car  {
+public class Car implements Comparable {
     private int maxSpeed;
     private int years;
 
@@ -34,4 +34,8 @@ public class Car  {
     }
 
 
+    @Override
+    public int compareTo(Object o) {            //не доделалЮ по принципу Компоратора
+        return 0;
+    }
 }

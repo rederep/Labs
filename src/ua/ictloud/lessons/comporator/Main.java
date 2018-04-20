@@ -5,13 +5,14 @@ import java.util.Comparator;
 import java.util.Random;
 
 /**
- * Created by student on 18-Apr-18.     Интерфейс КОМПОРАТОР
+ * Created by student on 18-Apr-18.     Интерфейс КОМПОРАТОР?,    comparable  прочитать!
+ *
  */
 public class Main{
     public static void main(String[] args) {
         Integer[] array = getArray();
         Comparator comparator = new IntComporator();
-
+String d = new String();
         System.out.println("Original array");
         System.out.println(Arrays.toString(array));
         Arrays.sort(array);
