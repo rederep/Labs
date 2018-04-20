@@ -57,13 +57,11 @@ public class Main {
             } else {
                 System.out.println(aChar + " - lower Case");
             }
-
-            char[] temp = new char[chars.length];
-            for (int i = 0; i < chars.length; i++) {
-                temp[chars.length - i - 1] = chars[i];
-                System.out.println("test");
-            }
-            System.out.println(new String(temp));
         }
+        char[] temp = new char[chars.length];
+        for (int i = 0; i < chars.length; i++) {
+            temp[chars.length - i - 1] = chars[i];
+        }
+        System.out.println(new String(temp));
     }
 }
