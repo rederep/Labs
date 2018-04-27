@@ -8,6 +8,30 @@ public abstract class Human {
     private String lastNAme;
     private String middleNAme;
 
+    public String getFirstNAme() {
+        return firstNAme;
+    }
+
+    public void setFirstNAme(String firstNAme) {
+        this.firstNAme = firstNAme;
+    }
+
+    public String getLastNAme() {
+        return lastNAme;
+    }
+
+    public void setLastNAme(String lastNAme) {
+        this.lastNAme = lastNAme;
+    }
+
+    public String getMiddleNAme() {
+        return middleNAme;
+    }
+
+    public void setMiddleNAme(String middleNAme) {
+        this.middleNAme = middleNAme;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

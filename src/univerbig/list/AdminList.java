@@ -38,6 +38,11 @@ public class AdminList {
         administratorsLogicSize = resultIndex;
     }
 
+    public void setAdministrators(Administrator[] administrators) {
+        administratorsLogicSize=0;
+        addAdministrators(administrators);
+    }
+
     @Override
     public String toString() {
         return Arrays.toString(administrators);

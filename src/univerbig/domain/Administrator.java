@@ -1,10 +1,21 @@
 package univerbig.domain;
 
+import univerbig.list.AdminList;
+
 /**
  * Created by student on 25-Apr-18.
  */
-public class Administrator extends Human{
+public class Administrator extends Human implements Comparable{
     private int typingSpeed;
+
+
+    public int getTypingSpeed() {
+        return typingSpeed;
+    }
+
+    public void setTypingSpeed(int typingSpeed) {
+        this.typingSpeed = typingSpeed;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -30,5 +41,11 @@ public class Administrator extends Human{
         return "Administrator{" +
                 "typingSpeed=" + typingSpeed +
                 "} " + super.toString();
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        Administrator administrator = (Administrator) o;
+        return Integer.compare(typingSpeed,administrator.typingSpeed);
     }
 }
