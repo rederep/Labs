@@ -5,6 +5,7 @@ import java.util.*;
 /**
  * Created by student on 04-May-18.  ++++   ArrayList быстро получием лбой элемент, ограничен SizeInt,
  * LinkedLiat быстро вставляет, удаляем и в любое место, неограничен
+ * Итераторы
  */
 public class Main {
     public static void main(String[] args) {
@@ -55,6 +56,44 @@ public class Main {
         System.out.println(li2.size());
 
         Deque<String> li3 = new LinkedList<>();
+        //указатель меняется с методами next, previous
+        System.out.println();
+        System.out.println("ITERATOR");
+
+        LinkedList<String> li4 = new LinkedList<>();
+        li4.add("Hello");
+        li4.add("World");
+        li4.add(null);
+        System.out.println(li4);
+
+
+        Iterator<String> i1 =  li4.iterator();
+
+        System.out.println("Size:" + li4.size());
+        System.out.println(i1.next());
+        System.out.println(i1.hasNext());
+        System.out.println(i1.next());
+        System.out.println(i1.next());
+        System.out.println(i1.hasNext());
+
+        System.out.println("\nLIST ITERATOR");
+        ListIterator<String> i2 = li4.listIterator(1);   //идем с 1 элемента
+        System.out.println(i2.hasNext());
+        System.out.println(i2.previous());
+        System.out.println(i2.hasPrevious());
+        System.out.println(i2.next());
+        i2.remove();                            //удаляет в коллекции текущий элемент указателя
+        System.out.println(i2.nextIndex());
+        System.out.println(i2.next());
+        System.out.println(i2.nextIndex());
+        System.out.println();
+
+        Iterator<String> i3 = li4.iterator();
+        while (i3.hasNext()){
+            System.out.print(i3.next()+ "---");
+        }
+
+
 
     }
 }
