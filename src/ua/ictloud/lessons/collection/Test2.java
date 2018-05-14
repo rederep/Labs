@@ -25,4 +25,5 @@ public class Test2 {
             print.add(var);
         }
     }
-}
+
+  }
