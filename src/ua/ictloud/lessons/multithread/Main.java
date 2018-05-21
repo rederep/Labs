@@ -1,6 +1,6 @@
 package ua.ictloud.lessons.multithread;
 
-/** МНОГОПОТОЧЯНОСТЬ   5 состояний (new-Runnable-(Stop/Pause)-Running-Dead)
+/** МНОГОПОТОЧЯНОСТЬ   5 состояний (new-Runnable-(Waiting)-Running-Dead)
  * Created by student on 14-May-18.
  */
 public class Main {

@@ -1,4 +1,4 @@
-package ua.ictloud.lessons.multithread;
+package ua.ictloud.lessons.multithread.test;
 
 import java.util.Random;
 
