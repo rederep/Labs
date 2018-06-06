@@ -24,23 +24,31 @@ public class TestStringMain {
 
         bw.close();
         fw.close();
+
+        String[] temp = new String[3];
         List<TestStringStudent> listSt = new ArrayList<>();
         BufferedReader br = new BufferedReader(new FileReader("stout.txt"));
         String currentLine;
         while ((currentLine = br.readLine()) != null) {         //конец документа возвращает null
+            int count = 0;
             StringTokenizer strT = new StringTokenizer(currentLine, "   ");
             while (strT.hasMoreElements()) {
-                System.out.print(strT.nextElement());
-
-
+                //  System.out.println(strT.nextElement());
+                if (count == 0) {
+                    temp[0] = (String) strT.nextElement();
+                } else if (count == 1) {
+                    temp[1] = (String) strT.nextElement();
+                } else {
+                    temp[2] =(String) strT.nextElement();
+                }
+                count++;
                 // И ТАК СОЙДЕТ ))))
-
             }
-         //  listSt.add(new TestStringStudent());
+            listSt.add(new TestStringStudent(temp[0], temp[1],  Integer.parseInt(temp[2])));
             System.out.println();
-
         }
-
-
+        for (TestStringStudent student : listSt) {
+            System.out.println(student);
+        }
     }
 }
