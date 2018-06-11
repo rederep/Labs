@@ -1,6 +1,7 @@
 package ua.ictloud.lessons.jdbch2.itcloud.dao.impl;
 
 import ua.ictloud.lessons.jdbch2.itcloud.dao.CarDAO;
+import ua.ictloud.lessons.jdbch2.itcloud.exception.CarNotFound;
 import ua.ictloud.lessons.jdbch2.itcloud.model.Car;
 
 import java.sql.*;
@@ -13,7 +14,7 @@ import static ua.ictloud.lessons.jdbch2.itcloud.dao.impl.ConnectionFactory.getIn
  * Created by student on 08-Jun-18.
  */
 public class CarDAOH2Impl implements CarDAO {
-    private static final String CREATE_CAR_TABLE = "CREATE TABLE IF NOT EXISTS cars (" +
+    private static final String CREATE_CAR_TABLE = "CREATE TABLE IF NOT EXISTS cars (" +    //Через Statement
             Car.ID + " INT(11) PRIMARY KEY AUTO_INCREMENT, " +
             Car.MAXSPEED + " DOUBLE(11), " +
             Car.MODEL + " VARCHAR(20), " +
@@ -22,6 +23,7 @@ public class CarDAOH2Impl implements CarDAO {
     private static final String GET_ALL_CARS = "SELECT * FROM cars;";
     //  private static final String INSERT_CAR = "INSERT INTO cars(" + Car.MAXSPEED + ", " + Car.MODEL + ", " + Car.YEAR + ") VALUES (?, ?, ?);";   // ? - заменяет неизвестное поле или параметр через PreparedStatement
     private static final String INSERT_CAR = String.format("INSERT INTO cars(%s, %s, %s) VALUES (?, ?, ?);", Car.MAXSPEED, Car.MODEL, Car.YEAR);
+    private static final String DELETE_CAR_BY_ID = String.format("DELETE FROM cars WHERE %s=?", Car.ID);
 
     private Connection conn;
     private PreparedStatement pst = null;
@@ -88,6 +90,30 @@ public class CarDAOH2Impl implements CarDAO {
     public void updateCar(Car car) {
 
     }
+
+    @Override
+    public void deleteCar(int carId) throws CarNotFound {
+        try {
+            conn = getInstance().getConnection();
+            pst = conn.prepareStatement(DELETE_CAR_BY_ID);
+            pst.setInt(1,carId);
+            pst.execute();
+            int result = pst.executeUpdate();
+            if (result ==0){
+                throw new CarNotFound();
+            }
+           pst.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }finally {
+            getInstance().closePreparedStatement(pst);
+            getInstance().closeConnection(conn);
+        }
+
+
+    }
+
+
 
     private void createTableIfNotExists() {
         try {
