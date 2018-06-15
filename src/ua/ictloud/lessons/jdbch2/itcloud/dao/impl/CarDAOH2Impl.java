@@ -97,7 +97,7 @@ public class CarDAOH2Impl implements CarDAO {
             conn = getInstance().getConnection();
             pst = conn.prepareStatement(DELETE_CAR_BY_ID);
             pst.setInt(1,carId);
-            pst.execute();
+        //    pst.execute();
             int result = pst.executeUpdate();
             if (result ==0){
                 throw new CarNotFound();

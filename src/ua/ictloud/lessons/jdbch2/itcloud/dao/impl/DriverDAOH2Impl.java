@@ -25,9 +25,9 @@ public class DriverDAOH2Impl implements DriverDAO {
     private static final String GET_ALL_DRIVER = "SELECT * FROM drivers;";
     private static final String INSERT_DRIVER = String.format("INSERT INTO drivers(%s, %s, %s, %s) VALUES (?, ?, ?, ?);", Driver.FIRSTNAME, Driver.LASTNAME, Driver.EXP, Driver.CATEGORY);
     private static final String DELETE_DRIVER_BY_ID = String.format("DELETE FROM drivers WHERE %s=?", Driver.ID);
-    private static final String FIND_COUNT_LAST_NAME = "SELECT COUNT(" + Driver.LASTNAME + ") FROM drivers;";
-    private static final String FIND_COUNT_LAST_NAME_AND_ID = String.format("SELECT COUNT(%s) FROM drivers WHERE %s!=?;", Driver.LASTNAME, Driver.ID);
-    private static final String UPDATE_DRIVER = String.format("UPDATE drivers SET %s = ?, %s = ?, %s = ?, %s = ?, WHERE %s = ?;",
+    private static final String FIND_COUNT_LAST_NAME = String.format("SELECT COUNT(%s) FROM drivers WHERE %s = ?;", Driver.LASTNAME, Driver.LASTNAME);
+    private static final String FIND_COUNT_LAST_NAME_AND_ID = String.format("SELECT COUNT(%s) FROM drivers WHERE %s = ? AND %s != ?;", Driver.LASTNAME, Driver.LASTNAME, Driver.ID);
+    private static final String UPDATE_DRIVER = String.format("UPDATE drivers SET %s = ?, %s = ?, %s = ?, %s = ? WHERE %s = ?;",
             Driver.FIRSTNAME, Driver.LASTNAME, Driver.EXP, Driver.CATEGORY, Driver.ID);
 
     private Connection conn;
@@ -54,9 +54,13 @@ public class DriverDAOH2Impl implements DriverDAO {
         try {
             conn = getInstance().getConnection();
             stmt = conn.createStatement();
-            rs = stmt.executeQuery(FIND_COUNT_LAST_NAME);
-
+            pst = conn.prepareStatement(FIND_COUNT_LAST_NAME);
+            //      rs = stmt.executeQuery(FIND_COUNT_LAST_NAME);
+            pst.setString(1, driver.getLastName());
+            pst.execute();
+            rs = pst.getResultSet();
             while (rs.next()) {
+                //     System.out.println(rs.getInt(1));
                 if (rs.getInt(1) <= 0) {
                     pst = conn.prepareStatement(INSERT_DRIVER);
                     pst.setString(1, driver.getFirstName());
@@ -107,19 +111,26 @@ public class DriverDAOH2Impl implements DriverDAO {
     }
 
     @Override
-    public void updateDriver(Driver driver, int driverID) throws DriverLastNameUniqueExp {
+    public void updateDriver(Driver driver) throws DriverLastNameUniqueExp {
         try {
             conn = getInstance().getConnection();
             stmt = conn.createStatement();
-            rs = stmt.executeQuery(FIND_COUNT_LAST_NAME_AND_ID);
-
+            pst = conn.prepareStatement(FIND_COUNT_LAST_NAME_AND_ID);
+            //      rs = stmt.executeQuery(FIND_COUNT_LAST_NAME);
+            pst.setString(1, driver.getLastName());
+            pst.setInt(2, driver.getId());
+            pst.execute();
+            rs = pst.getResultSet();
             while (rs.next()) {
+                 //  System.out.println(rs.getInt(1));
                 if (rs.getInt(1) <= 0) {
+
                     pst = conn.prepareStatement(UPDATE_DRIVER);
                     pst.setString(1, driver.getFirstName());
                     pst.setString(2, driver.getLastName());
                     pst.setInt(3, driver.getExp());
                     pst.setString(4, String.valueOf(driver.getCategory()));
+                    pst.setInt(5, driver.getId());
                     pst.execute();
                 } else {
                     throw new DriverLastNameUniqueExp(driver.getLastName());
@@ -141,9 +152,8 @@ public class DriverDAOH2Impl implements DriverDAO {
             conn = getInstance().getConnection();
             pst = conn.prepareStatement(DELETE_DRIVER_BY_ID);
             pst.setInt(1, driverId);
-            pst.execute();
-            int result = pst.executeUpdate();
-            if (result == 0) {
+            int isDeleteResult = pst.executeUpdate();
+            if (isDeleteResult == 0) {
                 throw new DriverNotFoundExp();
             }
             pst.executeUpdate();

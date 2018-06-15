@@ -12,6 +12,6 @@ import java.util.List;
 public interface DriverDAO {
     void addDriver (Driver driver) throws SQLException, DriverLastNameUniqueExp;
     List<Driver> getAllDrivers();
-    void updateDriver(Driver driver, int driverID) throws DriverLastNameUniqueExp;
+    void updateDriver(Driver driver) throws DriverLastNameUniqueExp;
     void deleteDriver(int driverId) throws DriverNotFoundExp;
 }
