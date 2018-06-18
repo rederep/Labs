@@ -1,5 +1,5 @@
 <component name="libraryTable">
-  <library name="h2-1.4.197">
+  <library name="org.h2.Driver">
     <CLASSES>
       <root url="jar://$PROJECT_DIR$/libs/h2-1.4.197.jar!/" />
     </CLASSES>

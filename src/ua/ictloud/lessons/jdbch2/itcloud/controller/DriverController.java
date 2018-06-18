@@ -94,23 +94,23 @@ public class DriverController {
     private void updateDriver() {
         Scanner sc = new Scanner(System.in);
         System.out.println("Enter ID by who must be update");
-        Driver driverMain = driverService.getAllDrivers().get(sc.nextInt()-1);
-        System.out.println("Update Driver: "+ driverMain.toString());
+        Driver driverMain = driverService.getAllDrivers().get(sc.nextInt() - 1);
+        System.out.println("Update Driver: " + driverMain.toString());
         Driver driverUpd = enterDrivarInfo();
-        if (driverUpd.getLastName().length()!=0){
+        if (driverUpd.getLastName().length() != 0) {
             driverMain.setLastName(driverUpd.getLastName());
         }
-        if (driverUpd.getFirstName().length()!=0){
+        if (driverUpd.getFirstName().length() != 0) {
             driverMain.setFirstName(driverUpd.getFirstName());
         }
-        if (driverUpd.getCategory().length()!=0){
+        if (driverUpd.getCategory().length() != 0) {
             driverMain.setCategory(driverUpd.getCategory());
         }
-        if (driverUpd.getExp()!=driverMain.getExp() && driverUpd.getExp()!=0){
+        if (driverUpd.getExp() != driverMain.getExp() && driverUpd.getExp() != 0) {
             driverMain.setExp(driverUpd.getExp());
         }
         try {
-            System.out.println("Update driver too: "+ driverMain.toString());
+            System.out.println("Update driver too: " + driverMain.toString());
             driverService.updateDriver(driverMain);
         } catch (DriverLastNameUniqueExp driverLastNameUniqueExp) {
             driverLastNameUniqueExp.getMessage();
@@ -131,7 +131,7 @@ public class DriverController {
 
     private Driver enterDrivarInfo() {
         Driver driver = getInstance();
-      //  Driver driver = new Driver();
+        //  Driver driver = new Driver();
         Scanner s = new Scanner(System.in);
         System.out.print("Enter First Name: ");
         String firstName = s.nextLine();
@@ -141,8 +141,12 @@ public class DriverController {
         String tmp = s.nextLine();
         StringBuilder category = new StringBuilder(tmp);
         System.out.print("Enter Experience: ");
-        int exp = 0;
-        exp = s.nextInt();
+        int exp;
+        try {
+            exp = Integer.parseInt(s.nextLine());
+        } catch (NumberFormatException e) {
+            exp = 0;
+        }
         driver.setFirstName(firstName);
         driver.setLastName(lastName);
         driver.setExp(exp);
