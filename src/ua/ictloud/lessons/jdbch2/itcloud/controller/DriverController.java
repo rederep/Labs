@@ -1,5 +1,6 @@
 package ua.ictloud.lessons.jdbch2.itcloud.controller;
 
+import sun.security.util.Length;
 import ua.ictloud.lessons.jdbch2.itcloud.exception.DriverLastNameUniqueExp;
 import ua.ictloud.lessons.jdbch2.itcloud.exception.DriverNotFoundExp;
 import ua.ictloud.lessons.jdbch2.itcloud.model.Driver;
@@ -93,15 +94,24 @@ public class DriverController {
     private void updateDriver() {
         Scanner sc = new Scanner(System.in);
         System.out.println("Enter ID by who must be update");
-        Driver driver = getInstance();
-        driver = driverService.getAllDrivers().get(sc.nextInt());
-
-
-        driver = enterDrivarInfo();
-
-// НЕДОДЕЛАЛ !!!!!
+        Driver driverMain = driverService.getAllDrivers().get(sc.nextInt()-1);
+        System.out.println("Update Driver: "+ driverMain.toString());
+        Driver driverUpd = enterDrivarInfo();
+        if (driverUpd.getLastName().length()!=0){
+            driverMain.setLastName(driverUpd.getLastName());
+        }
+        if (driverUpd.getFirstName().length()!=0){
+            driverMain.setFirstName(driverUpd.getFirstName());
+        }
+        if (driverUpd.getCategory().length()!=0){
+            driverMain.setCategory(driverUpd.getCategory());
+        }
+        if (driverUpd.getExp()!=driverMain.getExp() && driverUpd.getExp()!=0){
+            driverMain.setExp(driverUpd.getExp());
+        }
         try {
-            driverService.updateDriver(driver);
+            System.out.println("Update driver too: "+ driverMain.toString());
+            driverService.updateDriver(driverMain);
         } catch (DriverLastNameUniqueExp driverLastNameUniqueExp) {
             driverLastNameUniqueExp.getMessage();
         }
@@ -121,16 +131,18 @@ public class DriverController {
 
     private Driver enterDrivarInfo() {
         Driver driver = getInstance();
+      //  Driver driver = new Driver();
         Scanner s = new Scanner(System.in);
         System.out.print("Enter First Name: ");
         String firstName = s.nextLine();
         System.out.print("Enter Last Name: ");
         String lastName = s.nextLine();
-        System.out.print("Enter Experience: ");
-        int exp = s.nextInt();
         System.out.print("Enter Category: ");
         String tmp = s.nextLine();
         StringBuilder category = new StringBuilder(tmp);
+        System.out.print("Enter Experience: ");
+        int exp = 0;
+        exp = s.nextInt();
         driver.setFirstName(firstName);
         driver.setLastName(lastName);
         driver.setExp(exp);
