@@ -12,12 +12,14 @@ import ua.ictloud.lessons.jdbch2.itcloud.model.Car;
 import ua.ictloud.lessons.jdbch2.itcloud.model.Driver;
 
 import java.sql.SQLException;
+import java.util.Arrays;
+import java.util.UUID;
 
 /**
  * Created by student on 08-Jun-18.
  */
 public class Main {
-    public static void main(String[] args) throws DriverLastNameUniqueExp {
+    public static void main(String[] args) throws DriverLastNameUniqueExp, SQLException {
 //        CarDAO carDAO = new CarDAOH2Impl();
 ////        carDAO.addcar(new Car("Audi", 1999, 260));
 ////        carDAO.addcar(new Car("Ford", 1980, 240));
@@ -31,7 +33,7 @@ public class Main {
 //        System.out.println(carDAO.getAllCars());
 
 
-        DriverDAO driverDAO = new DriverDAOH2Impl();
+        //       DriverDAO driverDAO = new DriverDAOH2Impl();
 //        try {
 //            driverDAO.addDriver(new Driver("Roma", "Petrov", 15, new StringBuilder("1D")));
 //            driverDAO.addDriver(new Driver("Vasya", "Lazarev", 16, new StringBuilder("2D")));
@@ -67,9 +69,32 @@ public class Main {
 //        }
 //        System.out.println(driverDAO.getAllDrivers());
 
+////       with service
+//        DriverController drv = new DriverController();
+//        drv.startDriver();
 
-        DriverController drv = new DriverController();
-        drv.startDriver();
+        CarDAO carDAO = new CarDAOH2Impl();
+        DriverDAO driverDAO = new DriverDAOH2Impl();
+
+//        try {
+//            driverDAO.addDriver(new Driver("Vova", "Petrov",10, new StringBuilder("2D")));
+//            driverDAO.addDriver(new Driver("Vova1", "Petrov1",10, new StringBuilder("1D")));
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+        //     carDAO.addcar(new Car("bmw",1500,320));
+        //       carDAO.addcar(new Car("audi",2000,320));
+
+        Driver d1 = new Driver("FN", UUID.randomUUID().toString(), 3, new StringBuilder("1D"),
+                Arrays.asList(new Car("Tesla", 2015, 320),
+                        new Car("Tesla", 2015, 320)));
+        driverDAO.addDriver(d1);
+
+        System.out.println(driverDAO.getAllDrivers());
+//        for (Driver driver : driverDAO.getAllDrivers()) {
+//            System.out.println(driver);
+//        }
+
 
     }
 

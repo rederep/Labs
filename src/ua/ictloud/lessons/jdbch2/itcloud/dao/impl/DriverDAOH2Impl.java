@@ -1,13 +1,17 @@
 package ua.ictloud.lessons.jdbch2.itcloud.dao.impl;
 
+import ua.ictloud.lessons.jdbch2.itcloud.dao.CarDAO;
 import ua.ictloud.lessons.jdbch2.itcloud.dao.DriverDAO;
 import ua.ictloud.lessons.jdbch2.itcloud.exception.DriverLastNameUniqueExp;
 import ua.ictloud.lessons.jdbch2.itcloud.exception.DriverNotFoundExp;
+import ua.ictloud.lessons.jdbch2.itcloud.model.Car;
 import ua.ictloud.lessons.jdbch2.itcloud.model.Driver;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 import static ua.ictloud.lessons.jdbch2.itcloud.dao.impl.ConnectionFactory.getInstance;
 
@@ -15,14 +19,10 @@ import static ua.ictloud.lessons.jdbch2.itcloud.dao.impl.ConnectionFactory.getIn
  * Created by student on 11-Jun-18.
  */
 public class DriverDAOH2Impl implements DriverDAO {
-    private static final String CREATE_DRIVER_TABLE = "CREATE TABLE IF NOT EXISTS drivers (" +
-            Driver.ID + " INT(11) PRIMARY KEY AUTO_INCREMENT, " +
-            Driver.FIRSTNAME + " VARCHAR(50), " +
-            Driver.LASTNAME + " VARCHAR(50) UNIQUE, " +
-            Driver.EXP + " INT(4), " +
-            Driver.CATEGORY + " VARCHAR(5)" +
-            ");";
-    private static final String GET_ALL_DRIVER = "SELECT * FROM drivers;";
+
+
+    private static final String GET_ALL_DRIVER = "SELECT * FROM drivers " +
+            "INNER JOIN cars ON drivers.id = cars.driver_id;";
     private static final String INSERT_DRIVER = String.format("INSERT INTO drivers(%s, %s, %s, %s) VALUES (?, ?, ?, ?);", Driver.FIRSTNAME, Driver.LASTNAME, Driver.EXP, Driver.CATEGORY);
     private static final String DELETE_DRIVER_BY_ID = String.format("DELETE FROM drivers WHERE %s=?", Driver.ID);
     private static final String FIND_COUNT_LAST_NAME = String.format("SELECT COUNT(%s) FROM drivers WHERE %s = ?;", Driver.LASTNAME, Driver.LASTNAME);
@@ -34,19 +34,10 @@ public class DriverDAOH2Impl implements DriverDAO {
     private PreparedStatement pst = null;
     private Statement stmt = null;
     private ResultSet rs = null;
+    private CarDAO carDAO;
 
     public DriverDAOH2Impl() {
-        try {
-            conn = getInstance().getConnection();
-            stmt = conn.createStatement();
-            stmt.execute(CREATE_DRIVER_TABLE);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            getInstance().closeStatement(stmt);
-            getInstance().closeConnection(conn);
-        }
-
+        carDAO = new CarDAOH2Impl();
     }
 
     @Override
@@ -62,12 +53,24 @@ public class DriverDAOH2Impl implements DriverDAO {
             while (rs.next()) {
                 //     System.out.println(rs.getInt(1));
                 if (rs.getInt(1) <= 0) {
-                    pst = conn.prepareStatement(INSERT_DRIVER);
+                    pst = conn.prepareStatement(INSERT_DRIVER, Statement.RETURN_GENERATED_KEYS);  //получеам id новой записи
                     pst.setString(1, driver.getFirstName());
                     pst.setString(2, driver.getLastName());
                     pst.setInt(3, driver.getExp());
                     pst.setString(4, String.valueOf(driver.getCategory()));
                     pst.execute();
+
+                    rs = pst.getGeneratedKeys();            //загоняем в rs id новой записи drivera
+                    rs.next();
+                    Driver newDriver = new Driver(rs.getInt(1));  //создается driver уже с полученным ID и заночится через конструктор в этот обеькт
+
+                    List <Car> cars = driver.getCars();
+                    if (cars!=null){
+                        for (int i = 0; i < cars.size(); i++) {    //прошлись по дисту car
+                            cars.get(i).setDriver(newDriver);       //в лист записать id driver
+                            carDAO.addcar(cars.get(i));        //добавляем измененный обьект кара (с id_drivers) в базу
+                        }
+                    }
                 } else {
                     throw new DriverLastNameUniqueExp(driver.getLastName());
                 }
@@ -88,16 +91,30 @@ public class DriverDAOH2Impl implements DriverDAO {
             conn = getInstance().getConnection();
             stmt = conn.createStatement();
             rs = stmt.executeQuery(GET_ALL_DRIVER);
+            Map<Integer, Driver> driverMap = new TreeMap<>();
             while (rs.next()) {
-                Driver driver = new Driver();
-                driver.setId(rs.getInt(Driver.ID));
-                driver.setFirstName(rs.getString(Driver.FIRSTNAME));
-                driver.setLastName(rs.getString(Driver.LASTNAME));
-                driver.setExp(rs.getInt(Driver.EXP));
-                driver.setCategory(new StringBuilder(rs.getString(Driver.CATEGORY)));
-                result.add(driver);
-            }
+                int id = rs.getInt(Driver.ID);
+                Driver driver = driverMap.get(id);   //proveryaem est li v map
 
+                if (driver == null) {
+                    driver = new Driver();
+                    driver.setId(rs.getInt(Driver.ID));
+                    driver.setFirstName(rs.getString(Driver.FIRSTNAME));
+                    driver.setLastName(rs.getString(Driver.LASTNAME));
+                    driver.setExp(rs.getInt(Driver.EXP));
+                    driver.setCategory(new StringBuilder(rs.getString(Driver.CATEGORY)));
+                    driver.setCars(new ArrayList<>());
+                    driverMap.put(id, driver);
+                }
+                Car car = new Car();
+                car.setId(rs.getInt(Car.DRIVER_ID));    //для иннера джоина
+                car.setMaxSpeed(rs.getDouble(Car.MAXSPEED));
+                car.setModel(rs.getString(Car.MODEL));
+                car.setYear(rs.getInt(Car.YEAR));
+
+                driver.getCars().add(car);    // получили лист автомобилий и добавили туда полученный сверху авто.
+            }
+            result.addAll(driverMap.values());   //добавили в лист значения тримепепа
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -122,7 +139,7 @@ public class DriverDAOH2Impl implements DriverDAO {
             pst.execute();
             rs = pst.getResultSet();
             while (rs.next()) {
-                 //  System.out.println(rs.getInt(1));
+                //  System.out.println(rs.getInt(1));
                 if (rs.getInt(1) <= 0) {
 
                     pst = conn.prepareStatement(UPDATE_DRIVER);

@@ -1,5 +1,7 @@
 package ua.ictloud.lessons.jdbch2.itcloud.model;
 
+import java.util.List;
+
 /**
  * Created by student on 11-Jun-18.
  */
@@ -15,7 +17,7 @@ public class Driver {
     private String lastName;
     private int exp;
     private StringBuilder category;
-
+    private List<Car> cars;
     public Driver() {
     }
 
@@ -24,6 +26,26 @@ public class Driver {
         this.lastName = lastName;
         this.exp = exp;
         this.category = category;
+    }
+
+    public Driver(String firstName, String lastName, int exp, StringBuilder category, List<Car> cars) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.exp = exp;
+        this.category = category;
+        this.cars = cars;
+    }
+
+    public Driver(int id) {
+        this.id = id;
+    }
+
+    public List<Car> getCars() {
+        return cars;
+    }
+
+    public void setCars(List<Car> cars) {
+        this.cars = cars;
     }
 
     public int getId() {
@@ -68,11 +90,13 @@ public class Driver {
 
     @Override
     public String toString() {
-        return "Driver#"+ id +
+        return "Driver{" +
+                "id=" + id +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", exp=" + exp +
-                ", category='" + category + '\''
-                + "\n";
+                ", category=" + category +
+                ", cars=" + cars +
+                '}' + "\n";
     }
 }

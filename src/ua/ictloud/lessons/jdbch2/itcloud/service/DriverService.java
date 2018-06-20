@@ -1,6 +1,8 @@
 package ua.ictloud.lessons.jdbch2.itcloud.service;
 
+import ua.ictloud.lessons.jdbch2.itcloud.dao.CarDAO;
 import ua.ictloud.lessons.jdbch2.itcloud.dao.DriverDAO;
+import ua.ictloud.lessons.jdbch2.itcloud.dao.impl.CarDAOH2Impl;
 import ua.ictloud.lessons.jdbch2.itcloud.dao.impl.DriverDAOH2Impl;
 import ua.ictloud.lessons.jdbch2.itcloud.dao.impl.Factory;
 import ua.ictloud.lessons.jdbch2.itcloud.exception.DriverLastNameUniqueExp;
@@ -19,7 +21,6 @@ public class DriverService {
     public DriverService() {
         //this.driverDAO = new DriverDAOH2Impl();                 //instance??????
         this.driverDAO = Factory.getInstance();
-
     }
     public void addDriver (Driver driver) throws DriverLastNameUniqueExp, SQLException {
         driverDAO.addDriver(driver);
