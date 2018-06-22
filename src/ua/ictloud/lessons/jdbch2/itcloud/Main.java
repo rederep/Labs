@@ -5,6 +5,7 @@ import ua.ictloud.lessons.jdbch2.itcloud.dao.CarDAO;
 import ua.ictloud.lessons.jdbch2.itcloud.dao.DriverDAO;
 import ua.ictloud.lessons.jdbch2.itcloud.dao.impl.CarDAOH2Impl;
 import ua.ictloud.lessons.jdbch2.itcloud.dao.impl.DriverDAOH2Impl;
+import ua.ictloud.lessons.jdbch2.itcloud.dto.DriverDTO;
 import ua.ictloud.lessons.jdbch2.itcloud.exception.CarNotFound;
 import ua.ictloud.lessons.jdbch2.itcloud.exception.DriverLastNameUniqueExp;
 import ua.ictloud.lessons.jdbch2.itcloud.exception.DriverNotFoundExp;
@@ -12,7 +13,9 @@ import ua.ictloud.lessons.jdbch2.itcloud.model.Car;
 import ua.ictloud.lessons.jdbch2.itcloud.model.Driver;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -85,18 +88,43 @@ public class Main {
         //     carDAO.addcar(new Car("bmw",1500,320));
         //       carDAO.addcar(new Car("audi",2000,320));
 
-        Driver d1 = new Driver("FN", UUID.randomUUID().toString(), 3, new StringBuilder("1D"),
-                Arrays.asList(new Car("Tesla", 2015, 320),
-                        new Car("Tesla", 2015, 320)));
-        driverDAO.addDriver(d1);
 
-        System.out.println(driverDAO.getAllDrivers());
-//        for (Driver driver : driverDAO.getAllDrivers()) {
-//            System.out.println(driver);
-//        }
+//        Driver d1 = new Driver("N", UUID.randomUUID().toString(), 3, new StringBuilder("1D"),
+//                Arrays.asList(new Car("Tyek", 2015, 320),
+//                        new Car("Tetk", 2015, 320)));
+//        driverDAO.addDriver(d1);
 
+  //     System.out.println(driverDAO.getAllDrivers());
+               for (Driver driver : driverDAO.getAllDrivers()) {
+            System.out.println(driver);
+              }
+
+
+        //Пример с транзаакциями
+        Car car1 = carDAO.getAllCars().get(1);
+        System.out.println(car1);
+        car1.setModel("111");      //лимит поля 3  поставили
+        car1.setYear(777779999);
+        carDAO.updateCar(car1);
+        System.out.println(carDAO.getAllCars().get(1));
+
+
+       for (DriverDTO driverDTO : getAllDriversDTO()){
+           System.out.println(driverDTO);
+       }
 
     }
+
+    //пример вызова класса DTO, для уменьшения передоваемой инфы, нужно в SERVICE
+    public static List<DriverDTO> getAllDriversDTO(){
+        DriverDAO driverDAO = new DriverDAOH2Impl();
+        List<DriverDTO> driverDTOS = new ArrayList<>();
+        for (Driver driver : driverDAO.getAllDrivers()) {
+            driverDTOS.add(DriverDTO.toDTO(driver));
+        }
+        return driverDTOS;
+    }
+
 
 
 }

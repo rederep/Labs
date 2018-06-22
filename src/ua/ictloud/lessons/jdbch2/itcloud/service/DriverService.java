@@ -5,11 +5,13 @@ import ua.ictloud.lessons.jdbch2.itcloud.dao.DriverDAO;
 import ua.ictloud.lessons.jdbch2.itcloud.dao.impl.CarDAOH2Impl;
 import ua.ictloud.lessons.jdbch2.itcloud.dao.impl.DriverDAOH2Impl;
 import ua.ictloud.lessons.jdbch2.itcloud.dao.impl.Factory;
+import ua.ictloud.lessons.jdbch2.itcloud.dto.DriverDTO;
 import ua.ictloud.lessons.jdbch2.itcloud.exception.DriverLastNameUniqueExp;
 import ua.ictloud.lessons.jdbch2.itcloud.exception.DriverNotFoundExp;
 import ua.ictloud.lessons.jdbch2.itcloud.model.Driver;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -37,6 +39,8 @@ public class DriverService {
     public void deleteDriver(int driverID) throws DriverNotFoundExp {
         driverDAO.deleteDriver(driverID);
     }
+
+
 
 
 }

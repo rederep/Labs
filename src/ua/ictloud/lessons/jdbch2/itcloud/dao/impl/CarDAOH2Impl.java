@@ -19,7 +19,7 @@ public class CarDAOH2Impl implements CarDAO {
     private static final String CREATE_CAR_TABLE = "CREATE TABLE IF NOT EXISTS cars (" +    //Через Statement
             Car.ID + " INT(11) PRIMARY KEY AUTO_INCREMENT, " +
             Car.MAXSPEED + " DOUBLE(11), " +
-            Car.MODEL + " VARCHAR(20), " +
+            Car.MODEL + " VARCHAR(3), " +
             Car.YEAR + " INT(4), " +
             Car.DRIVER_ID + " INT(11) REFERENCES drivers("+Driver.ID+")"+
             ");";
@@ -34,7 +34,8 @@ public class CarDAOH2Impl implements CarDAO {
     //  private static final String INSERT_CAR = "INSERT INTO cars(" + Car.MAXSPEED + ", " + Car.MODEL + ", " + Car.YEAR + ") VALUES (?, ?, ?);";   // ? - заменяет неизвестное поле или параметр через PreparedStatement
     private static final String INSERT_CAR = String.format("INSERT INTO cars(%s, %s, %s, %s) VALUES (?, ?, ?, ?);", Car.MAXSPEED, Car.MODEL, Car.YEAR, Car.DRIVER_ID);
     private static final String DELETE_CAR_BY_ID = String.format("DELETE FROM cars WHERE %s=?", Car.ID);
-
+    private static final String UPDATE_CAR = String.format("UPDATE cars SET %s = ?, %s = ?, %s = ?  WHERE %s = ?;",
+            Car.MODEL, Car.MAXSPEED, Car.YEAR, Car.ID);
     private Connection conn;
     private PreparedStatement pst = null;
     private Statement stmt = null;
@@ -99,7 +100,29 @@ public class CarDAOH2Impl implements CarDAO {
 
     @Override
     public void updateCar(Car car) {
-
+        try {
+            conn = getInstance().getConnection();
+                    conn.setAutoCommit(false);   //отк автоматичи подтверждение транзакции ТРАНЗАКЦИЯ
+                    pst = conn.prepareStatement(UPDATE_CAR);
+                    pst.setString(1, car.getModel());
+                    pst.setDouble(2, car.getMaxSpeed());
+                    pst.setInt(3, car.getYear());
+       //             pst.setInt(4, car.getDriver().getId());
+                    pst.setInt(4, car.getId());
+                    pst.execute();
+               conn.commit();   //запускаем коммит         ТРАНЗАКЦИЯ
+        } catch (SQLException e) {
+            try {
+                conn.rollback();
+            } catch (SQLException e1) {
+                e1.printStackTrace();
+            }
+            e.printStackTrace();
+        } finally {
+            getInstance().closeResaultSet(rs);
+            getInstance().closePreparedStatement(pst);
+            getInstance().closeConnection(conn);
+        }
     }
 
     @Override

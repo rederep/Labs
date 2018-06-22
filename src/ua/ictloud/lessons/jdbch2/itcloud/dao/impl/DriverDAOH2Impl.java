@@ -44,15 +44,18 @@ public class DriverDAOH2Impl implements DriverDAO {
     public void addDriver(Driver driver) throws DriverLastNameUniqueExp {
         try {
             conn = getInstance().getConnection();
+
             stmt = conn.createStatement();
             pst = conn.prepareStatement(FIND_COUNT_LAST_NAME);
-            //      rs = stmt.executeQuery(FIND_COUNT_LAST_NAME);
+
             pst.setString(1, driver.getLastName());
             pst.execute();
             rs = pst.getResultSet();
             while (rs.next()) {
                 //     System.out.println(rs.getInt(1));
                 if (rs.getInt(1) <= 0) {
+                //    conn.setAutoCommit(false);   //отк автоматичи подтверждение транзакции ТРАНЗАКЦИЯ
+                    rs = stmt.executeQuery(FIND_COUNT_LAST_NAME);
                     pst = conn.prepareStatement(INSERT_DRIVER, Statement.RETURN_GENERATED_KEYS);  //получеам id новой записи
                     pst.setString(1, driver.getFirstName());
                     pst.setString(2, driver.getLastName());
@@ -75,7 +78,13 @@ public class DriverDAOH2Impl implements DriverDAO {
                     throw new DriverLastNameUniqueExp(driver.getLastName());
                 }
             }
+         //   conn.commit();   //запускаем коммит         ТРАНЗАКЦИЯ
         } catch (SQLException e) {
+      //      try {
+        //        conn.rollback();                             //если выкинуло в ошибку, откат всех транзакций  ТРАНЗАКЦИЯ
+        //    } catch (SQLException e1) {
+      //          e1.printStackTrace();
+        //   }
             e.printStackTrace();
         } finally {
             getInstance().closeResaultSet(rs);
@@ -107,7 +116,7 @@ public class DriverDAOH2Impl implements DriverDAO {
                     driverMap.put(id, driver);
                 }
                 Car car = new Car();
-                car.setId(rs.getInt(Car.DRIVER_ID));    //для иннера джоина
+                car.setId(rs.getInt(Car.ID));
                 car.setMaxSpeed(rs.getDouble(Car.MAXSPEED));
                 car.setModel(rs.getString(Car.MODEL));
                 car.setYear(rs.getInt(Car.YEAR));
