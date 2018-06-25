@@ -25,28 +25,4 @@ public class Main {
 }
 
 
-//    List<String> strings = Arrays.asList("bqwEq", "aw2", "DddQda", "LaaLa");
 //
-//
-//    List<String> result = new ArrayList<>();
-//        for (String string : strings) {
-//                if (string.length()>4) {
-//                result.add(string.toLowerCase());
-//                }
-//                }
-//                Collections.sort(result, new Comparator<String>() {
-//@Override
-//public int compare(String o1, String o2) {
-//        return o2.compareTo(o1);
-//        }
-//        });
-//        System.out.println(result);
-//
-//// withs Streams
-//        List<String> streamResult = strings.stream()
-//        .filter(s -> s.length()>4)
-//        .map(String::toLowerCase)
-//        .sorted(Comparator.reverseOrder())
-//        .collect(Collectors.toList());
-//        System.out.println(streamResult);
-//        }
