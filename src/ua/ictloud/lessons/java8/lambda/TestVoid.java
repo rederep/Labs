@@ -1,4 +1,4 @@
-package ua.ictloud.lessons.lambdaj8;
+package ua.ictloud.lessons.java8.lambda;
 
 public interface TestVoid {
     // void show();
