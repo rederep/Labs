@@ -39,6 +39,7 @@ public class Main {
                 .sorted(Comparator.reverseOrder())
                 .limit(2)
                 .collect(Collectors.toList());
+
         System.out.print(result2);
 
     }
