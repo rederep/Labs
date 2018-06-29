@@ -4,7 +4,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
-// Class - почти высший общий Class но не  Object
+// Class - почти высший общий Class но не  Object     Доступ к методам и переменным класса без создания обекта  (new)
 
 public class MainR {
     public static void main(String[] args) throws NoSuchFieldException, IllegalAccessException {
