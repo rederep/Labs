@@ -8,24 +8,53 @@ public class Subscription {
     private LocalDate endSubs;
     public Type type;
 
-
-
-    public Subscription(LocalDate startSubs, LocalDate endSubs) {
-        this.startSubs = startSubs;
-        this.endSubs = endSubs;
+    public Subscription() {
     }
 
-    public enum Type{
+    public Subscription(LocalDate startSubs, Type type) {
+        this.startSubs = startSubs;
+        this.type = type;
+        LocalDate date;
+        switch (type) {
+            case BASIC:{
+                date = startSubs.plusMonths(3);
+                break;}
+            case LARGE:{
+                date = startSubs.plusMonths(6);
+                break;}
+            case PRO:{
+                date = startSubs.plusMonths(10);
+                break;}
+            case KING:{
+                date = startSubs.plusYears(1);
+                break; }
+            default: {
+                date = startSubs;
+            }
+        }
+        this.endSubs = date;
+    }
+
+    public enum Type {
         BASIC,
         LARGE,
         PRO,
         KING;
     }
 
-    public Subscription(Type type) {
-        this.type = type;
+    /**
+     * //java DOC
+     *
+     * @param type
+     * @throws - none exception
+     */
+
+    @Override
+    public String toString() {
+        return "Subscription{" +
+                "startSubs=" + startSubs +
+                ", endSubs=" + endSubs +
+                ", type=" + type +
+                '}';
     }
-
-    
-
 }
