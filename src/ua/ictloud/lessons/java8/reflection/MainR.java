@@ -19,6 +19,7 @@ public class MainR {
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
+
         System.out.println();
 // упрощенный вызов
         Class c2 = RT.class;
